@@ -1,4 +1,4 @@
-package io.sourceforge.campino93.GhostRider;
+package io.github.mataxx.GhostRider;
 
 import java.io.BufferedReader;
 import java.io.File;
