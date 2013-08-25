@@ -1,0 +1,31 @@
+name: GhostRider
+main: io.sourceforge.campino93.GhostRider.GhostRider
+version: 0.7
+
+commands:
+  initShip:
+    description: initShip
+    usage: /initShip [x-Richtung] [z-Richtung] [y-Richtung]
+    permission: GhostRider.initShip
+    permission-message: Ouh Nein!    
+
+  startShip:
+    description: startShip
+    usage: /startShip
+    permission: GhostRider.startShip
+    permission-message: Ouh Nein!
+
+  stopShip:
+    description: stopShip
+    usage: /stopShip
+    permission: GhostRider.stopShip
+    permission-message: Ouh Nein!
+    
+  turnShip:
+    description: turnShip
+    usage: /turnShip <shipname> <left/right>
+    permission: GhostRider.turnShip
+    permission-message: Ouh Nein! 
+permissions:
+  GhostRider.*:
+    default: op
