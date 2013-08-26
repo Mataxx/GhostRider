@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -87,28 +89,26 @@ public class Ships
 	  if (!this.driving) return false;
 	  if (Bukkit.getPlayer(this.owner_name).isOnline()) {
 		  this.owner = Bukkit.getPlayer(this.owner_name);
-		  //this.owner.sendMessage(this.shipIndex + "");
 	  }
 
 	  modifyShip(x1, x2, z1, z2, y1, y2, direction, 0, null);
 	  
 	  switch (this.direction) {
 	  	case 0:
-	  		this.z1 -= 1;
-	  		this.z2 -= 1;
+	  		this.z1--;
+	  		this.z2--;
 	  		break;
-	  	
 	  	case 1:
-	  		this.x1 += 1;
-	  		this.x2 += 1;
+	  		this.x1++;
+	  		this.x2++;
 	  		break;
 	  	case 2:
-	  		this.z1 += 1;
-	  		this.z2 += 1;
+	  		this.z1++;
+	  		this.z2++;
 	  		break;
 	  	case 3:
-	  		this.x1 -= 1;
-	  		this.x2 -= 1;
+	  		this.x1--;
+	  		this.x2--;
 	  		break;
 	  }
 
@@ -117,8 +117,7 @@ public class Ships
 	  return true;
   }
   
-  @SuppressWarnings("null")
-public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int dir, int mode, int[][][] newStack){
+  public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int dir, int mode, int[][][] newStack){
 	  /*
 	   * mode 0: set next pos
 	   * mode 1: write to stack
@@ -126,22 +125,17 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
 	   * mode 3: set new pos
 	   */
 	  
-	  int h_end = 0; int l_end = 0; int w_end = 0; int x_dir = 0; int z_dir = 0; int x_manu = 0; int z_manu = 0;
-	  h_end = Math.abs(this.y2 - this.y1);
-
-	  int x1_tmp = 0; int z1_tmp = 0;
+	  int x_dir=0, z_dir=0, x_manu=0, z_manu=0;
+	  int x1_tmp=0, z1_tmp=0;
 
 	  switch (dir) {
 	  	case 0:	
-	  		x1_tmp = Math.min(this.x1, this.x2);
-	  		z1_tmp = Math.min(this.z1, this.z2);
-	  		this.x2 = Math.max(this.x1, this.x2);
-	  		this.z2 = Math.max(this.z1, this.z2);
-	  		this.x1 = x1_tmp;
-	  		this.z1 = z1_tmp;
-	
-	  		l_end = Math.abs(this.z2 - this.z1);
-	  		w_end = Math.abs(this.x2 - this.x1);
+	  		x1_tmp = Math.min(x1, x2);
+	  		z1_tmp = Math.min(z1, z2);
+	  		x2 = Math.max(x1, x2);
+	  		z2 = Math.max(z1, z2);
+	  		x1 = x1_tmp;
+	  		z1 = z1_tmp;
 	
 	  		x_dir = 0;
 	  		x_manu = 1;
@@ -151,15 +145,12 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
 	  		break;
       
 	  	case 1:
-	  		x1_tmp = Math.max(this.x1, this.x2);
-	  		z1_tmp = Math.min(this.z1, this.z2);
-	  		this.x2 = Math.min(this.x1, this.x2);
-	  		this.z2 = Math.max(this.z1, this.z2);
-	  		this.x1 = x1_tmp;
-	  		this.z1 = z1_tmp;
-	  		
-	  		l_end = Math.abs(this.x2 - this.x1);
-	  		w_end = Math.abs(this.z2 - this.z1);
+	  		x1_tmp = Math.max(x1, x2);
+	  		z1_tmp = Math.min(z1, z2);
+	  		x2 = Math.min(x1, x2);
+	  		z2 = Math.max(z1, z2);
+	  		x1 = x1_tmp;
+	  		z1 = z1_tmp;
 	  		
 	  		x_dir = 1;
 	  		x_manu = -1;
@@ -169,15 +160,12 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
 	  		break;
       
 	  	case 2:
-	  		x1_tmp = Math.max(this.x1, this.x2);
-	  		z1_tmp = Math.max(this.z1, this.z2);
-	  		this.x2 = Math.min(this.x1, this.x2);
-	  		this.z2 = Math.min(this.z1, this.z2);
-	  		this.x1 = x1_tmp;
-	  		this.z1 = z1_tmp;
-	  		
-	  		l_end = Math.abs(this.z2 - this.z1);
-	  		w_end = Math.abs(this.x2 - this.x1);
+	  		x1_tmp = Math.max(x1, x2);
+	  		z1_tmp = Math.max(z1, z2);
+	  		x2 = Math.min(x1, x2);
+	  		z2 = Math.min(z1, z2);
+	  		x1 = x1_tmp;
+	  		z1 = z1_tmp;
 	  		
 	  		x_dir = 0;
 	  		x_manu = -1;
@@ -187,15 +175,12 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
 	  		break;
       
 	  	case 3:
-	  		x1_tmp = Math.min(this.x1, this.x2);
-	  		z1_tmp = Math.max(this.z1, this.z2);
-	  		this.x2 = Math.max(this.x1, this.x2);
-	  		this.z2 = Math.min(this.z1, this.z2);
-	  		this.x1 = x1_tmp;
-	  		this.z1 = z1_tmp;
-	  		
-	  		l_end = Math.abs(this.x2 - this.x1);
-	  		w_end = Math.abs(this.z2 - this.z1);
+	  		x1_tmp = Math.min(x1, x2);
+	  		z1_tmp = Math.max(z1, z2);
+	  		x2 = Math.max(x1, x2);
+	  		z2 = Math.min(z1, z2);
+	  		x1 = x1_tmp;
+	  		z1 = z1_tmp;
 	  		
 	  		x_dir = -1;
 	  		x_manu = 1;
@@ -206,17 +191,15 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
 	  
 	  
 	  int[][][] stack = new int[20][20][20];	  	 
-			 
 	  if (newStack != null) stack = newStack;
 
-	  
-	  for (int h = 0; h <= h_end; h++)
+	  for (int h = 0; h <= height; h++)
 	  {
-		  for (int l = 0; l <= l_end; l++)
+		  for (int l = 0; l <= length; l++)
 		  {	
-			  for (int w = 0; w <= w_end; w++) {
+			  for (int w = 0; w <= width; w++) {
 				  int w2 = 0; int l2 = 0;
-				  if ((this.direction == 1) || (this.direction == 3)) {
+				  if ((dir == 1) || (dir == 3)) {
 					  w2 = l;
 					  l2 = w;
 				  } else {
@@ -226,43 +209,42 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
 
 				  // normal driving
 				  if(mode == 0) {
-					  Block oldBlock = this.owner.getWorld().getBlockAt(this.x1 + w2 * x_manu, this.y1 + h, this.z1 + l2 * z_manu);
-					  Block newBlock = this.owner.getWorld().getBlockAt(this.x1 + w2 * x_manu + x_dir, this.y1 + h, this.z1 + l2 * z_manu + z_dir);
+					  Block oldBlock = owner.getWorld().getBlockAt(x1 + w2 * x_manu, y1 + h, z1 + l2 * z_manu);
+					  Block newBlock = owner.getWorld().getBlockAt(x1 + w2 * x_manu + x_dir, y1 + h, z1 + l2 * z_manu + z_dir);
 					  int oldBlock_ID = oldBlock.getTypeId();
 					  
 					  oldBlock.setType(oldBlock.getY() <= this.waterlvl ? Material.WATER : Material.AIR);
 
 					  newBlock.setTypeId(oldBlock_ID);
-
-					  // if (debug) this.owner.sendMessage("x:" + w + " ID:" + oldBlock_ID);
 				  }
 				  
 				  // write ship to stack
 				  if(mode == 1){
-					  stack[h][l][w] = owner.getWorld().getBlockTypeIdAt(this.x1 + w2 * x_manu, this.y1 + h, this.z1 + l2 * z_manu);
-					  if (h == 2) owner.sendMessage(stack[h][l][w] + "");
+					  stack[h][l][w] = owner.getWorld().getBlockTypeIdAt(x1 + w2 * x_manu, y1 + h, z1 + l2 * z_manu);
+					  writeLog(h+"-"+l+"-"+w+": "+stack[h][l][w]);
 				  }
 							  
 				  // delete ship from world
 				  if(mode == 2) {
 					  int newBlockID = ((y1+h) <= waterlvl) ? Material.WATER.getId() : Material.AIR.getId();
-					  Block deleteBlock = this.owner.getWorld().getBlockAt(this.x1 + w2 * x_manu, this.y1 + h, this.z1 + l2 * z_manu);
+					  Block deleteBlock = owner.getWorld().getBlockAt(x1 + w2 * x_manu, y1 + h, z1 + l2 * z_manu);
 					  deleteBlock.setTypeId(newBlockID);					  
 				  }
 
+				  // ReadPos from Stack
 				  if(mode == 3) {
-					  // ReadPos from Stack
-					  Block newBlock = this.owner.getWorld().getBlockAt(this.x1 + w2 * x_manu, this.y1 + h, this.z1 + l2 * z_manu);
+					  
+					  owner.sendMessage(dir +"");
+					  Block newBlock = owner.getWorld().getBlockAt(x1 + w2 * x_manu, y1 + h, z1 + l2 * z_manu);
 					  int newBlockID = stack[h][l][w];
-
-					  if (h == 2) owner.sendMessage(stack[h][l][w] + "");
 					  
 					  newBlock.setTypeId(newBlockID);
+					  
+					  writeLog(h+"-"+l+"-"+w+": "+stack[h][l][w]);
 				  }				  
 			  }
 		  }
 	  }
-	  
 	  return (mode==1) ? stack : null;
   }
   
@@ -271,47 +253,45 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
 	  int newDir=0;
 	  int nx1=x1,nx2=x2,  nz1=z1,nz2=z2;
 	  
-	  owner.sendMessage(direction+"");
-	  
 	  switch (direction) {
 	  	case 0:
 	  		if (cmdDir.equals("left")) {
 	  			newDir = 3;
-	  			nx1 -= length+width;
-	  			nz1 += width;
+	  			nx1 = x1-length+width;
+	  			nz1 = z1+width;
 	  		} else {
 	  			newDir = 1;
-	  			nx1 += length;
+	  			nx1 = x1+length;
 	  		}
 	  		break;
 	  	case 1:
 	  		if (cmdDir.equals("left")) {
 	  			newDir = 0;
-	  			nx1 -= width;
-	  			nz1 -= length+width;
+	  			nx1 = x1-width;
+	  			nz1 = z1-length+width;
 	  		} else {
 	  			newDir = 2;
-	  			nz1 += length;
+	  			nz1 = z1+length;
 	  		}
 	  		break;
 	  	case 2:
 	  		if (cmdDir.equals("left")) {
 	  			newDir = 1;
-	  			nx1 += length-width;
-	  			nz1 -= width;
+	  			nx1 = x1+length-width;
+	  			nz1 = z1-width;
 	  		} else {
 	  			newDir = 3;
-	  			nx1-=length;
+	  			nx1 = x1-length;
 	  		}
 	  		break;
 	  	case 3:
 	  		if (cmdDir.equals("left")) {
 	  			newDir = 2;
-	  			nx1 += width;
-	  			nz1 += length-width;
+	  			nx1 = x1+width;
+	  			nz1 = z1+length-width;
 	  		} else {
 	  			newDir = 0;
-	  			nz1-=length;
+	  			nz1 = z1-length;
 	  		}
 	  		break;
 	  }
@@ -338,17 +318,24 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
 	  
 	  // write ship to stack;
 	  int[][][] blockIDs = new int[20][20][20];
-	  blockIDs = modifyShip(x1, x2, z2, z2, y1, y2, direction, 1, null);
+	  blockIDs = modifyShip(x1, x2, z1, z2, y1, y2, direction, 1, null);
 	  
 	  // delete old ship from world
-	  modifyShip(x1, x2, z2, z2, y1, y2, direction, 2, null);
+	  modifyShip(x1, x2, z1, z2, y1, y2, direction, 2, null);
 	  
 	  // set new ship position
-	  owner.sendMessage(""+ newDir);
-	  modifyShip(nx1, nx2, nz2, nz2, y1, y2, newDir, 3, blockIDs);
+	  owner.sendMessage("NEUE POSITION:"+nx1+"-"+nx2+"-"+nz1+"-"+nz2);
+	  modifyShip(nx1, nx2, nz1, nz2, y1, y2, newDir, 3, blockIDs);
 	  
-	  // set new direction global
+	  // set new shipstats global
 	  direction = newDir;
+	  x1 = nx1;
+	  z1 = nz1;
+	  x2 = nx2;
+	  z2 = nz2;
+	  
+	  // writeShip to file
+	  this.writeShipToFile(Shipname);
   }
 
   public void writeShipToFile(String Shipname)
@@ -429,5 +416,23 @@ public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int 
   public void setDirection(int dir)
   {
     this.direction = dir;
+  }
+  
+  public void writeLog(String var)
+  {
+	  Calendar cal = Calendar.getInstance();
+	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:ms --> ");
+	  String time = sdf.format(cal.getTime());
+	  
+	  try {
+	  File f = new File(".\\plugins\\ghostrider\\debug.log");
+	  FileWriter writer = new FileWriter(f, true);
+
+      writer.write(time+ var + "\r\n");
+      writer.flush();
+      writer.close();
+	  } catch (IOException e) {
+    	  
+      }
   }
 }
