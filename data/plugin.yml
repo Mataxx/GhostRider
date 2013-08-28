@@ -1,6 +1,6 @@
 name: GhostRider
 main: io.github.mataxx.GhostRider.GhostRider
-version: 0.7b
+version: 0.9
 
 commands:
   initShip:
@@ -11,21 +11,47 @@ commands:
 
   startShip:
     description: startShip
-    usage: /startShip
+    usage: /startShip [shipname]
     permission: GhostRider.startShip
     permission-message: Ouh Nein!
 
   stopShip:
     description: stopShip
-    usage: /stopShip
+    usage: /stopShip [shipname]
     permission: GhostRider.stopShip
     permission-message: Ouh Nein!
     
   turnShip:
     description: turnShip
-    usage: /turnShip <shipname> <left/right>
+    usage: /turnShip [shipname] [left/right]
     permission: GhostRider.turnShip
+    permission-message: Ouh Nein!
+    
+  setRoute:
+    description: setRoute
+    usage: /setRoute [shipname] [point]
+    permission: GhostRider.setRoute
+    permission-message: Ouh Nein!
+        
+  startRoute:
+    description: startRoute
+    usage: /startRoute [shipname] [point]
+    permission: GhostRider.startRoute
+    permission-message: Ouh Nein!
+
+  iS:
+    description: iS
+    usage: /iS [x-Richtung] [z-Richtung] [y-Richtung]
+    permission: GhostRider.iS
+    permission-message: Ouh Nein!  
+    
+  s:
+    description: s
+    usage: /s [shipname] [+ / - / < / >]
+    permission: GhostRider.s
     permission-message: Ouh Nein! 
+    
+    
 permissions:
   GhostRider.*:
     default: op
