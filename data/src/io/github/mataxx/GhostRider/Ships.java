@@ -29,6 +29,8 @@ public class Ships {
 	
 	private int chgHeight = 0;
 
+	
+	// ############################ SHIPS ############################
 	public Ships(Player p, String Shipname, GhostRider plug) {
 		owner = p;
 		owner_name = p.getName();
@@ -36,12 +38,14 @@ public class Ships {
 		this.Shipname = Shipname;
 	}
 
+	// ############################ SHIPS ############################
 	public Ships(String p, String Shipname, GhostRider plug) {
 		owner_name = p;
 		plugin = plug;
 		this.Shipname = Shipname;
 	}
 
+	// ############################ READ SHIP ############################
 	public void readShip() {
 		readShip(this.Shipname);
 	}
@@ -61,13 +65,15 @@ public class Ships {
 		
 		chgHeight = 1;
 	}
-
+	
+	// ############################ SET SIZE ############################
 	public void setSize(int l, int h, int w) {
 		length = l;
 		height = h;
 		width = w;
 	}
 	
+	// ############################ WRITE POSITION TO ROUTE ############################
 	public void writeRoutePos(int pos, Player p)
 	{
 		String newLine = pos + ":" + p.getLocation().getBlockX() + ";" + p.getLocation().getBlockZ() + "\r\n";
@@ -130,6 +136,7 @@ public class Ships {
 		}
 	}
 
+	// ############################ GET WATER-LEVEL ############################
 	public boolean getWaterLvl() {
 		for (int i = y1; i <= y2; i++) {
 			switch (direction) {
@@ -158,6 +165,7 @@ public class Ships {
 		return false;
 	}
 
+	// ############################ DRIVE SHIP ############################
 	public boolean driveShip(boolean start) {
 		if (!driving) return false;
 		if (start) driving = true;
@@ -192,17 +200,24 @@ public class Ships {
 		return true;
 	}
 	
+	// ############################ DRIVE SHIP TO X/Z ############################
 	private boolean driveShipTo(final int x, final int z)
 	{				
 		if (Bukkit.getPlayer(owner_name).isOnline()) {
 			owner = Bukkit.getPlayer(owner_name);
 		}
-		
+		/*		
 		owner.sendMessage("x: " + x + " ; " + x1);
 		owner.sendMessage("z: " + z + " ; " + z1);
 		owner.sendMessage("state: " + state);
 		owner.sendMessage("dir: " + direction);
-
+		 */
+		if (!driving)
+		{
+			state = 0;
+			return false;
+		}
+			
 		if (state == 1 || state == 3)
 		{
 			modifyShip(x1, x2, z1, z2, y1, y2, direction, 0, null);
@@ -230,7 +245,8 @@ public class Ships {
 				break;
 			}
 			
-			if ((z1 == z || x1 == x) && state == 1) state++;
+			if (x1 == x && state == 1) state++;
+			if (z1 == z && state == 3) state++;
 			if (z1 == z && x1 == x) state++;
 			
 		} else if (state == 2) {
@@ -259,22 +275,22 @@ public class Ships {
 		return false;
 	}
 	
+	// ############################ DRIVE THE SHIP WITH CORNER TO X/Z ############################
 	public void driveRouteTo (int x, int z)
 	{
-		int newDir = (x1 > x) ? 3 : 1;
-		//owner.sendMessage("dir: "+direction + " - newDir: "+newDir);
-		while (direction != newDir) turnShip("left");
-		
-		state = 1;
-		driveShipTo (x, z);
-		/*
-		turnShip(((z1 > z) ? "left" : "right"));
-		driveShipTo (x, z);
-		*/
-		
-		
+		if (state == 0)
+		{
+			int newDir = (x1 > x) ? 3 : 1;
+			while (direction != newDir) turnShip("left");
+			
+			// Active statemachine
+			state = 1;
+			driving = true;
+			driveShipTo (x, z);
+		}
 	}
 
+	// ############################ EVERY MOVEMENT OF SHIP ############################
 	public int[][][] modifyShip(int x1, int x2, int z1, int z2, int y1, int y2, int dir, int mode, int[][][] newStack) {
 		/*
 		 * mode 0: set next pos
@@ -348,8 +364,7 @@ public class Ships {
 		}
 
 		int[][][] stack = new int[20][20][20];
-		if (newStack != null)
-			stack = newStack;
+		if (newStack != null) stack = newStack;
 
 		for (int h = 0; h <= height; h++) {
 			for (int l = 0; l <= length; l++) {
@@ -406,6 +421,7 @@ public class Ships {
 		return (mode == 1) ? stack : null;
 	}
 
+	// ############################ TURN DIRECTION OF SHIP ############################
 	public void turnShip(String cmdDir) {
 		int newDir = 0;
 		int nx1 = x1, nx2 = x2, nz1 = z1, nz2 = z2;
@@ -493,6 +509,7 @@ public class Ships {
 		this.writeShipToFile(Shipname);
 	}
 
+	// ############################ WRITE SHIP-DATA TO SAVEFILE ############################
 	public void writeShipToFile(String Shipname) {
 		String path = "plugins\\ghostrider\\saves\\" + this.owner.getName();
 
@@ -516,6 +533,7 @@ public class Ships {
 		}
 	}
 
+	// ############################ READ SHIP FROM SAVEFILE ############################
 	public boolean readShip(String Shipname) {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader("plugins\\ghostrider\\saves\\" + this.owner_name + "\\" + Shipname + ".ghostrider"));
@@ -576,10 +594,12 @@ public class Ships {
 		return true;
 	}
 
+	// ############################ OLD - SET THE DIRECTION OF SHIP - ONLY DEBUG ############################
 	public void setDirection(int dir) {
 		this.direction = dir;
 	}
 
+	// ############################ WRITE STRING IN LOGFILE - ONLY DEBUG ############################
 	public void writeLog(String var) {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:ms --> ");
